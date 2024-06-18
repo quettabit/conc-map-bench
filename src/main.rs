@@ -22,3 +22,6 @@ fn main() {
         Options::Plot(options) => plot::plot(&options),
     }
 }
+
+#[global_allocator]
+static ALLOCATOR: mimalloc::MiMalloc = mimalloc::MiMalloc;

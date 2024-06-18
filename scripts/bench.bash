@@ -5,7 +5,7 @@ set -x
 BIN=./target/release/conc-map-bench
 OUT=./results
 
-cargo build --release
+# cargo build --release
 mkdir -p "$OUT"
 
 function bench {
@@ -25,9 +25,9 @@ function bench {
     fi
 }
 
-bench ReadHeavy std
-bench Exchange std
-bench RapidGrow std
+# bench ReadHeavy std
+# bench Exchange std
+# bench RapidGrow std
 
 bench ReadHeavy ahash
 bench Exchange ahash

@@ -1,7 +1,7 @@
 use std::collections::hash_map::RandomState;
 use std::hash::BuildHasher;
 use std::iter;
-use std::{fmt::Debug, io, thread::sleep, time::Duration};
+use std::{fmt::Debug, io};
 
 use bustle::*;
 use structopt::StructOpt;
@@ -42,14 +42,14 @@ pub struct Options {
     pub csv_no_headers: bool,
 }
 
-fn gc_cycle(options: &Options) {
-    sleep(Duration::from_millis(options.gc_sleep_ms));
-    let mut new_guard = crossbeam_epoch::pin();
-    new_guard.flush();
-    for _ in 0..32 {
-        new_guard.repin();
-    }
-}
+// fn gc_cycle(options: &Options) {
+//     sleep(Duration::from_millis(options.gc_sleep_ms));
+//     let mut new_guard = crossbeam_epoch::pin();
+//     new_guard.flush();
+//     for _ in 0..32 {
+//         new_guard.repin();
+//     }
+// }
 
 type Handler = Box<dyn FnMut(&str, u32, &Measurement)>;
 
@@ -93,16 +93,17 @@ where
     for n in &threads {
         let m = workloads::create(options, *n).run_silently::<C>();
         handler(name, *n, &m);
-        gc_cycle(options);
+        // gc_cycle(options);
     }
+
     println!();
 }
 
 fn run(options: &Options, h: &mut Handler) {
     //case::<StdRwLockBTreeMapTable<u64>>("std:sync::RwLock<BTreeMap>", options, h);
     //case::<ParkingLotRwLockBTreeMapTable<u64>>("parking_lot::RwLock<BTreeMap>", options, h);
-    case::<CHashMapTable<u64>>("CHashMap", options, h);
-    case::<CrossbeamSkipMapTable<u64>>("CrossbeamSkipMap", options, h);
+    //case::<CHashMapTable<u64>>("CHashMap", options, h);
+    //case::<CrossbeamSkipMapTable<u64>>("CrossbeamSkipMap", options, h);
 
     match options.hasher {
         HasherKind::Std => run_hasher_variant::<RandomState>(options, h),
@@ -116,10 +117,11 @@ where
 {
     //case::<StdRwLockStdHashMapTable<u64, H>>("std::sync::RwLock<StdHashMap>", options, h);
     //case::<ParkingLotRwLockStdHashMapTable<u64, H>>("parking_lot::RwLock<StdHashMap>", options, h);
-    case::<DashMapTable<u64, H>>("DashMap", options, h);
+    //case::<EvmapTable<u64, H>>("Evmap", options, h);
+    //case::<ContrieTable<u64, H>>("Contrie", options, h);
     case::<FlurryTable<u64, H>>("Flurry", options, h);
-    case::<EvmapTable<u64, H>>("Evmap", options, h);
-    case::<ContrieTable<u64, H>>("Contrie", options, h);
+    case::<DashMapTable<u64, H>>("DashMap", options, h);
+    case::<PapayaTable<u64, H>>("Papaya", options, h);
     case::<SccMapTable<u64, H>>("SccMap", options, h);
 }
 
