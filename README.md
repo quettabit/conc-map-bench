@@ -7,53 +7,33 @@ conc-map-bench uses the bustle benchmarking harness. This is a port of the well 
 The benchmark measures performance under varying load conditions. This is done
 because a map suitable for one workload may not be suitable for another.
 
-### Read Heavy
+### Update Heavy 1
 
-A read heavy model with few inserts, removals and updates. Models caching of data in places such as webservers and disk page caches.
 ```
-read   98%
-insert  1%
-remove  1%
-update  0%
-```
-
-### Exchange
-
-Insert and remove heavy model that replicates a scenario where the map is used to exchange data.
-```
-read    10%
-insert  40%
-remove  40%
-update  10%
-```
-
-### Rapid Grow
-
-An insert heavy model that replicates load in a scenario where the map is used to gather large amounts of data under a short burst.
-```
-read    5%
-insert 80%
+read   10%
+insert  5%
 remove  5%
-update 10%
+update  80%
 ```
 
-## How to run it?
+### Update Heavy 2
 
-```sh
-mv results results.bk
-./scripts/bench.bash
-./scripts/plot.bash
+```
+read    45%
+insert  5%
+remove  5%
+update  45%
 ```
 
 ## Results
 
-Machine: Apple M1 Pro (2021 14-inch MacBook Pro)
+Machine: Apple M3 Max
 
-OS: macOS 14.5
+OS: macOS 14.3
 
 See the `results/` directory.
 
-### Read Heavy (std hasher)
+<!-- ### Read Heavy (std hasher)
 | | |
 :-------------------------:|:-------------------------:
 ![](results/ReadHeavy.std.throughput.svg) | ![](results/ReadHeavy.std.latency.svg)
@@ -81,4 +61,14 @@ See the `results/` directory.
 ### Rapid Grow (ahash)
 | | |
 :-------------------------:|:-------------------------:
-![](results/RapidGrow.ahash.throughput.svg) | ![](results/RapidGrow.ahash.latency.svg)
+![](results/RapidGrow.ahash.throughput.svg) | ![](results/RapidGrow.ahash.latency.svg) -->
+
+### Update Heavy 1 (std hasher)
+| | |
+:-------------------------:|:-------------------------:
+![](results/UpdateHeavy1.std.throughput.svg) | ![](results/UpdateHeavy1.std.latency.svg)
+
+### Update Heavy 2 (std hasher)
+| | |
+:-------------------------:|:-------------------------:
+![](results/UpdateHeavy2.std.throughput.svg) | ![](results/UpdateHeavy2.std.latency.svg)

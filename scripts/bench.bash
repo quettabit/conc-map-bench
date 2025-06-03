@@ -25,12 +25,14 @@ function bench {
     fi
 }
 
-bench ReadHeavy std
-bench Exchange std
-bench RapidGrow std
+# bench ReadHeavy std
+# bench Exchange std
+# bench RapidGrow std
 
-bench ReadHeavy ahash
-bench Exchange ahash
-bench RapidGrow ahash
+# bench ReadHeavy ahash
+# bench Exchange ahash
+# bench RapidGrow ahash
+bench UpdateHeavy1 std
+bench UpdateHeavy2 std
 
 date
